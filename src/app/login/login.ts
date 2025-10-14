@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+declare const bootstrap: any; // 👈 use Bootstrap JS from global
 
 @Component({
   selector: 'app-login',
@@ -9,10 +11,16 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class Login implements OnInit {
+export class Login implements OnInit, AfterViewInit {
+  @ViewChild('successToast') successToast!: ElementRef;
 
   loginForm!: FormGroup;
   forgotForm!: FormGroup;
+  private toastInstance: any;
+
+  ngAfterViewInit(): void {
+    this.toastInstance = new bootstrap.Toast(this.successToast.nativeElement);
+  }
 
   // use Angular's `inject()` in standalone components to satisfy the lint rule
   private readonly fb = inject(FormBuilder);
@@ -42,7 +50,11 @@ export class Login implements OnInit {
       this.forgotForm.markAllAsTouched();
       return;
     }
-    alert(`Reset link sent to: ${this.forgotForm.value.email}`);
+
+    // simulate sending reset request ✅ show toast
+    setTimeout(() => {
+      this.toastInstance.show(); // 
+    }, 300);
   }
 
 }
