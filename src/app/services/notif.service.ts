@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToastOptions } from '../Interface/toast-options.interface';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const bootstrap: any;
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
@@ -56,7 +57,7 @@ export class NotifService {
 		container.appendChild(toastEl);
 
 		const toast = new bootstrap.Toast(toastEl, { delay: options.delay ?? 3000 });
-		let hideTimeout: any;
+		let hideTimeout: number;
 		let remainingTime = options.delay ?? 3000;
 		let lastTime = Date.now();
 
