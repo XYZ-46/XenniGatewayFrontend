@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NotifService } from '../services/notif.service';
+import { NotifService } from '../../services/notif.service';
 
 @Component({
 	selector: 'app-login',
