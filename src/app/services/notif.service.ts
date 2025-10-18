@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ToastOptions } from '../Interface/toast-options.interface';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const bootstrap: any;
@@ -99,4 +98,9 @@ export class NotifService {
 				return 'primary';
 		}
 	}
+}
+
+interface ToastOptions {
+  delay?: number; // auto close time in ms
+  pauseOnHover?: boolean;
 }
