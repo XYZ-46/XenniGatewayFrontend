@@ -1,91 +1,94 @@
-<div class="d-flex vh-100">
-    <!-- Sidebar -->
-    <nav [class.collapsed]="!sidebarOpen()" class="sidebar bg-dark text-white d-flex flex-column">
-        <div class="sidebar-header p-3 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">MyApp</h5>
-            <button class="btn btn-sm btn-outline-light d-md-none" (click)="toggleSidebar()">
-                <i class="bi bi-x-lg"></i>
+<div class="d-flex flex-column vh-100">
+    <!-- Topbar -->
+    <header class="d-flex justify-content-between align-items-center p-1 bg-dark text-white">
+        <div class="d-flex align-items-center">
+            <h5 class="mx-5">MyApp</h5>
+            <!-- Move toggle button here, right of appname -->
+            <button class="btn btn-outline-light ms-5" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+                <i class="bi bi-list"></i>
             </button>
         </div>
-        <div class="p-3">
-            <input type="text" class="form-control" placeholder="Search menu..." [(ngModel)]="searchTerm"
-                (ngModelChange)="filterMenu()" autocomplete="off" />
+
+        <div class="d-flex align-items-center">`
+            <!-- Notification dropdown -->
+            <div class="dropdown me-3">
+                <button class="btn btn-outline-light position-relative" type="button" id="notificationDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                    <i class="bi bi-bell"></i>
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
+                    style="min-width: 250px">
+                    <li>
+                        <h6 class="dropdown-header">Notifications</h6>
+                    </li>
+                    <li><a class="dropdown-item" href="#">New user registered</a></li>
+                    <li><a class="dropdown-item" href="#">Server rebooted</a></li>
+                    <li><a class="dropdown-item" href="#">You have 3 new messages</a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                </ul>
+            </div>
+
+            <!-- User dropdown -->
+            <div class="dropdown">
+                <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#"
+                    id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    John Doe
+                    <img src="/assets/male_avatar.png" alt="User" class="rounded-circle m-3" width="30" height="30" />
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Change Password</a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                </ul>
+            </div>
         </div>
-        <ul class="list-unstyled flex-grow-1 overflow-auto px-2">
-            <ng-container *ngFor="let item of filteredMenu">
-                <li>
-                    <div class="d-flex align-items-center p-2 sidebar-item" [class.has-children]="item.children" (click)="toggleExpand(item)" [attr.aria-expanded]="item.expanded" [class.active]="activeItem === item">
+    </header>
+
+    <div class="d-flex flex-grow-1 overflow-hidden">
+        <!-- Sidebar -->
+        <nav [class.collapsed]="!sidebarOpen" class="sidebar bg-dark text-white d-flex flex-column" role="navigation"
+            aria-label="Sidebar menu">
+            <div class="p-3">
+                <input type="text" class="form-control" placeholder="Search menu..." [(ngModel)]="searchTerm"
+                    (ngModelChange)="filterMenu()" autocomplete="off" aria-label="Search menu" />
+            </div>
+
+            <ul class="list-unstyled flex-grow-1 overflow-auto">
+                <li *ngFor="let item of filteredMenu" class="sidebar-item">
+                    <button type="button" class="btn btn-link d-flex align-items-center w-100 text-start p-2 text-white"
+                        [class.has-children]="item.children" (click)="toggleExpand(item)"
+                        [attr.aria-expanded]="item.expanded" [class.active]="activeItem === item">
                         <i *ngIf="item.icon" class="bi me-2" [class]="'bi-' + item.icon"></i>
                         <span>{{ item.title }}</span>
                         <i *ngIf="item.children" class="bi ms-auto" [class.bi-caret-down-fill]="item.expanded"
-                            [class.bi-caret-right-fill]="!item.expanded"></i>
-                    </div>
+                            [class.bi-caret-right-fill]="!item.expanded" aria-hidden="true"></i>
+                    </button>
+
+                    <!-- Submenu -->
                     <ul *ngIf="item.children && item.expanded" class="list-unstyled ps-4">
-                        <li *ngFor="let child of item.children" (click)="selectItem(child, $event)" class="sidebar-subitem p-2">
-                            <i *ngIf="child.icon" class="bi me-2" [class]="'bi-' + child.icon"></i>
-                            {{ child.title }}
+                        <li *ngFor="let child of item.children" class="sidebar-subitem p-0">
+                            <button type="button" class="btn btn-link w-100 text-start p-2 text-white"
+                                (click)="selectItem(child, $event)">
+                                <i *ngIf="child.icon" class="bi me-2" [class]="'bi-' + child.icon"></i>
+                                {{ child.title }}
+                            </button>
                         </li>
                     </ul>
                 </li>
-            </ng-container>
-        </ul>
-    </nav>
+            </ul>
+        </nav>
 
-    <!-- Main content area -->
-    <div class="flex-grow-1 d-flex flex-column">
-        <!-- Header -->
-        <header class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
-            <button class="btn btn-outline-secondary d-md-none" (click)="toggleSidebar()">
-                <i class="bi bi-list"></i>
-            </button>
-            <span class="fw-bold">Dashboard</span>
-
-
-            <div class="d-flex align-items-center">
-                <div class="dropdown me-3">
-                    <button class="btn btn-outline-secondary position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-bell"></i>
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
-                        style="min-width: 250px;">
-                        <li>
-                            <h6 class="dropdown-header">Notifications</h6>
-                        </li>
-                        <li><a class="dropdown-item" href="#">New user registered</a></li>
-                        <li><a class="dropdown-item" href="#">Server rebooted</a></li>
-                        <li><a class="dropdown-item" href="#">You have 3 new messages</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li><a class="dropdown-item text-center" href="#">View all</a></li>
-                    </ul>
-                </div>
-
-                <div class="dropdown">
-                    <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{this.maleavatar}}" alt="User" class="rounded-circle me-2" width="30" height="30" />
-                        John Doe
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Change Password</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                    </ul>
-                </div>
-
-            </div>
-        </header>
-
-        <!-- Replace your main content block -->
-        <main class="p-4 flex-grow-1 overflow-auto">
+        <!-- Main content -->
+        <main class="flex-grow-1 p-4 overflow-auto">
             <router-outlet></router-outlet>
         </main>
-
     </div>
 </div>
