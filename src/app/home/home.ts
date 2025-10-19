@@ -9,7 +9,8 @@ import { AfterViewInit, Component } from '@angular/core';
   styleUrl: './home.css'
 })
 export class Home implements AfterViewInit {
-  readonly avatar = '/assets/male_avatar.png';
+  // readonly maleavatar = '/assets/male_avatar.png';
+  // readonly femaleavatar = '/assets/male_avatar.png';
 
   cards = [
     { title: 'Users', value: 120, icon: 'bi bi-people', color: 'text-primary' },

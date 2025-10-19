@@ -1,55 +1,91 @@
-<div class="d-flex" id="wrapper">
-  <!-- Sidebar -->
-  <div class="border-end bg-dark text-white" id="sidebar-wrapper">
-    <div class="sidebar-heading border-bottom py-3">Admin Panel</div>
-    <div class="list-group list-group-flush">
-      <a routerLink="/dashboard" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
-      <a routerLink="/users" class="list-group-item list-group-item-action bg-dark text-white">Users</a>
-    </div>
-  </div>
-
-  <!-- Page Content -->
-  <div id="page-content-wrapper" class="w-100">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand navbar-light bg-light border-bottom">
-      <button class="btn btn-outline-secondary" id="sidebarToggle">
-        <i class="bi bi-list"></i>
-      </button>
-      <div class="ms-auto d-flex align-items-center gap-3">
-        <!-- Notifications -->
-        <div class="dropdown">
-          <button class="btn btn-light position-relative" data-bs-toggle="dropdown">
-            <i class="bi bi-bell"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><h6 class="dropdown-header">Notifications</h6></li>
-            <li><a class="dropdown-item" href="#">New user registered</a></li>
-            <li><a class="dropdown-item" href="#">System update available</a></li>
-            <li><a class="dropdown-item" href="#">Backup completed</a></li>
-          </ul>
+<div class="d-flex vh-100">
+    <!-- Sidebar -->
+    <nav [class.collapsed]="!sidebarOpen()" class="sidebar bg-dark text-white d-flex flex-column">
+        <div class="sidebar-header p-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">MyApp</h5>
+            <button class="btn btn-sm btn-outline-light d-md-none" (click)="toggleSidebar()">
+                <i class="bi bi-x-lg"></i>
+            </button>
         </div>
-
-        <!-- User -->
-        <div class="dropdown">
-          <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-            <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User" width="35" height="35" class="rounded-circle me-2">
-            <strong>John Doe</strong>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end shadow">
-            <li><a class="dropdown-item" href="#">My Profile</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Change Password</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
-          </ul>
+        <div class="p-3">
+            <input type="text" class="form-control" placeholder="Search menu..." [(ngModel)]="searchTerm"
+                (ngModelChange)="filterMenu()" autocomplete="off" />
         </div>
-      </div>
+        <ul class="list-unstyled flex-grow-1 overflow-auto px-2">
+            <ng-container *ngFor="let item of filteredMenu">
+                <li>
+                    <div class="d-flex align-items-center p-2 sidebar-item" [class.has-children]="item.children" (click)="toggleExpand(item)" [attr.aria-expanded]="item.expanded" [class.active]="activeItem === item">
+                        <i *ngIf="item.icon" class="bi me-2" [class]="'bi-' + item.icon"></i>
+                        <span>{{ item.title }}</span>
+                        <i *ngIf="item.children" class="bi ms-auto" [class.bi-caret-down-fill]="item.expanded"
+                            [class.bi-caret-right-fill]="!item.expanded"></i>
+                    </div>
+                    <ul *ngIf="item.children && item.expanded" class="list-unstyled ps-4">
+                        <li *ngFor="let child of item.children" (click)="selectItem(child, $event)" class="sidebar-subitem p-2">
+                            <i *ngIf="child.icon" class="bi me-2" [class]="'bi-' + child.icon"></i>
+                            {{ child.title }}
+                        </li>
+                    </ul>
+                </li>
+            </ng-container>
+        </ul>
     </nav>
 
-    <!-- Dynamic Page Content -->
-    <div class="container-fluid mt-3">
-      <router-outlet></router-outlet>
+    <!-- Main content area -->
+    <div class="flex-grow-1 d-flex flex-column">
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
+            <button class="btn btn-outline-secondary d-md-none" (click)="toggleSidebar()">
+                <i class="bi bi-list"></i>
+            </button>
+            <span class="fw-bold">Dashboard</span>
+
+
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-3">
+                    <button class="btn btn-outline-secondary position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bell"></i>
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
+                        style="min-width: 250px;">
+                        <li>
+                            <h6 class="dropdown-header">Notifications</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="#">New user registered</a></li>
+                        <li><a class="dropdown-item" href="#">Server rebooted</a></li>
+                        <li><a class="dropdown-item" href="#">You have 3 new messages</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{this.maleavatar}}" alt="User" class="rounded-circle me-2" width="30" height="30" />
+                        John Doe
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Change Password</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- Replace your main content block -->
+        <main class="p-4 flex-grow-1 overflow-auto">
+            <router-outlet></router-outlet>
+        </main>
+
     </div>
-  </div>
 </div>
