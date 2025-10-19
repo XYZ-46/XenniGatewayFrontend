@@ -1,6 +1,6 @@
 <div class="d-flex flex-column vh-100">
     <!-- Topbar -->
-    <header class="d-flex justify-content-between align-items-center p-1 bg-dark text-white">
+    <header class="d-flex justify-content-between align-items-center p-3 bg-dark text-white">
         <div class="d-flex align-items-center">
             <h5 class="mx-5">MyApp</h5>
             <!-- Move toggle button here, right of appname -->
@@ -9,9 +9,9 @@
             </button>
         </div>
 
-        <div class="d-flex align-items-center">`
+        <div class="d-flex align-items-center">
             <!-- Notification dropdown -->
-            <div class="dropdown me-3">
+            <div class="dropdown me-5">
                 <button class="btn btn-outline-light position-relative" type="button" id="notificationDropdown"
                     data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
                     <i class="bi bi-bell"></i>
@@ -22,6 +22,7 @@
                     style="min-width: 250px">
                     <li>
                         <h6 class="dropdown-header">Notifications</h6>
+                        <hr class="dropdown-divider" />
                     </li>
                     <li><a class="dropdown-item" href="#">New user registered</a></li>
                     <li><a class="dropdown-item" href="#">Server rebooted</a></li>
@@ -34,11 +35,11 @@
             </div>
 
             <!-- User dropdown -->
-            <div class="dropdown">
-                <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#"
-                    id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown me-3">
+                <a class="d-flex align-items-center btn-outline-light text-white text-decoration-none dropdown-toggle rounded-pill p-2"
+                    href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     John Doe
-                    <img src="/assets/male_avatar.png" alt="User" class="rounded-circle m-3" width="30" height="30" />
+                    <img src="{{this.male_avatar}}" alt="User" class="rounded-circle mx-2" width="30" height="30" />
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -63,7 +64,8 @@
 
             <ul class="list-unstyled flex-grow-1 overflow-auto">
                 <li *ngFor="let item of filteredMenu" class="sidebar-item">
-                    <button type="button" class="btn btn-link d-flex align-items-center w-100 text-start p-2 text-white"
+                    <button type="button"
+                        class="btn btn-link d-flex align-items-center w-100 text-start p-2 text-white text-decoration-none"
                         [class.has-children]="item.children" (click)="toggleExpand(item)"
                         [attr.aria-expanded]="item.expanded" [class.active]="activeItem === item">
                         <i *ngIf="item.icon" class="bi me-2" [class]="'bi-' + item.icon"></i>
@@ -75,8 +77,8 @@
                     <!-- Submenu -->
                     <ul *ngIf="item.children && item.expanded" class="list-unstyled ps-4">
                         <li *ngFor="let child of item.children" class="sidebar-subitem p-0">
-                            <button type="button" class="btn btn-link w-100 text-start p-2 text-white"
-                                (click)="selectItem(child, $event)">
+                            <button type="button" class="btn btn-link w-100 text-start p-2 text-white text-decoration-none"
+                                (click)="selectItem(child, $event)" [class.active]="activeItem === item">
                                 <i *ngIf="child.icon" class="bi me-2" [class]="'bi-' + child.icon"></i>
                                 {{ child.title }}
                             </button>

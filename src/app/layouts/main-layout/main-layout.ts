@@ -20,6 +20,9 @@ export class MainLayout {
 	searchTerm = '';
 	activeItem: MenuItem | null = null;
 
+	readonly male_avatar = '/assets/male_avatar.png';
+	readonly female_avatar = '/assets/male_avatar.png';
+
 	menu: MenuItem[] = [
 		{
 			title: 'Dashboard',
@@ -58,8 +61,8 @@ export class MainLayout {
 	}
 
 	selectItem(item: MenuItem, event: MouseEvent) {
-		event.stopPropagation();
 		this.activeItem = item;
+		event.stopPropagation();
 		// Add routing or other logic here
 	}
 
@@ -73,7 +76,7 @@ export class MainLayout {
 
 		this.filteredMenu = this.menu
 			.map((item) => this.filterItem(item, term))
-			.filter((item) => item !== null) as MenuItem[];
+			.filter((item) => item !== null);
 	}
 
 	private filterItem(item: MenuItem, term: string): MenuItem | null {
@@ -84,7 +87,7 @@ export class MainLayout {
 		if (item.children) {
 			const filteredChildren = item.children
 				.map((child) => this.filterItem(child, term))
-				.filter((child) => child !== null) as MenuItem[];
+				.filter((child) => child !== null);
 
 			if (filteredChildren.length > 0) {
 				return { ...item, children: filteredChildren, expanded: true };

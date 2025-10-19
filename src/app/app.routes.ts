@@ -1,16 +1,17 @@
 import { Routes } from '@angular/router';
 import { About1 } from './about1/about1';
 import { About2 } from './about2/about2';
-import { Home } from './home/home';
 import { Login } from './auth/login/login';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { BlankLayout } from './layouts/blank-layout/blank-layout';
+import { Users } from './users/users';
 
 export const routes: Routes = [
 	{
 		path: '',
 		component: MainLayout,
 		children: [
+			{ path: 'users', component: Users },
 			{ path: 'about2', component: About2 },
 			{ path: 'about1', component: About1 },
 		]
@@ -22,7 +23,5 @@ export const routes: Routes = [
 			{ path: 'auth/login', component: Login },
 		]
 	},
-	{ path: '**', redirectTo: 'login' },
-	{ path: 'home', component: Home },
-	{ path: 'auth/login', component: Login },
+	{ path: '**', redirectTo: 'about1' },
 ];
