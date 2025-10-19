@@ -1,0 +1,13 @@
+#wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+#sidebar-wrapper {
+  width: 250px;
+  transition: all 0.3s;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: -250px;
+}
