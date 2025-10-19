@@ -1,4 +1,11 @@
+@if (loadingService.isLoading$ | async) {
+<div class="loading-overlay">
+    <output class="spinner-border text-primary" aria-live="polite">
+        <span class="visually-hidden">Loading...</span>
+    </output>
+
+</div>
+}
+
 <!-- Router mount point: configured by provideRouter(routes) in app.config.ts -->
 <router-outlet></router-outlet>
-
-

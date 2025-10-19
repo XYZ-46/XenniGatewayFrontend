@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -12,4 +13,6 @@ import { environment } from '../environments/environment';
 })
 export class App {
   protected readonly title = signal(environment.appName);
+  public loadingService = inject(LoadingService);
+
 }

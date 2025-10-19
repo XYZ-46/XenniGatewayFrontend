@@ -40,7 +40,7 @@ export class Login implements OnInit {
 	}
 
 	async onLogin() {
-		// remove token from storage
+		// remove token from localstorage
 		this.authService.logout();
 
 		if (this.loginForm.invalid) {
@@ -50,7 +50,6 @@ export class Login implements OnInit {
 
 		try {
 			await this.authService.login(this.loginForm.value);
-
 		} catch (err: unknown) {
 			if (err instanceof HttpErrorResponse && err.error?.ErrorDetails) {
 				this.errorMessages = err.error.ErrorDetails;
