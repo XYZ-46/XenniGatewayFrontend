@@ -42,11 +42,9 @@ a#userDropdown:hover,
 /* Responsive for smaller screens */
 @media (max-width: 768px) {
     .sidebar {
-        position: fixed;
-        top: 56px;
-        /* header height */
+        position: auto;
+        flex-shrink: 0;
         bottom: 0;
-        z-index: 1050;
         background-color: #212529;
     }
 }

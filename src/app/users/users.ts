@@ -21,7 +21,7 @@ export class Users {
 
 
   constructor() {
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 1; i <= 100; i++) {
       this.users.push({
         id: i,
         name: `User ${i}`,
