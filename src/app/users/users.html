@@ -2,27 +2,48 @@
 
 	<!-- Page size + search inputs -->
 	<div class="d-flex justify-content-between align-items-center mb-3">
-		<div class="align-items-start">
-			<button class="btn btn-primary"> Search</button>
-		</div>
+		<button class="btn btn-primary material-icons btn_material">
+			<span class="material-icons">search</span>Search
+		</button>
+
+		<button class="btn btn-success material-icons btn_material">
+			<span class="material-icons">add_circle</span> New User
+		</button>
 	</div>
 
 	<!-- Table without scroll wrapper -->
 	<table class="table table-bordered table-striped table-hover">
-		<thead class="table-primary">
+		<thead class="table-primary table-responsive">
 			<tr>
-				<th>ID</th>
-				<th>Name</th>
-				<th>Email</th>
+				<th>ID <span class="material-icons">keyboard_arrow_down</span> </th>
+				<th>Nick Name <span class="material-icons">keyboard_arrow_up</span></th>
+				<th>Full Name <span class="material-icons">swap_vert</span></th>
+				<th>Tenant <i class="fa fa-sort"></i></th>
+				<th>Email <i class="fa fa-sort"></i></th>
+				<th>IsActive <i class="fa fa-sort"></i></th>
+				<th>Created Date <i class="fa fa-sort"></i></th>
+				<th>Updated Date <i class="fa fa-sort"></i></th>
 				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr *ngFor="let user of pagedUsers">
 				<td>{{ user.id }}</td>
+				<td></td>
+				<td></td>
 				<td>{{ user.name }}</td>
 				<td>{{ user.email }}</td>
 				<td></td>
+				<td></td>
+				<td></td>
+				<td class="action-field">
+					<a href="#" class="view" title="" data-toggle="tooltip" data-original-title="View"><i
+							class="material-icons"></i></a>
+					<a href="#" class="edit" title="" data-toggle="tooltip" data-original-title="Edit"><i
+							class="material-icons"></i></a>
+					<a href="#" class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
+							class="material-icons"></i></a>
+				</td>
 			</tr>
 			<tr *ngIf="pagedUsers.length === 0">
 				<td colspan="3" class="text-center">No users found</td>
@@ -33,27 +54,43 @@
 	<!-- Page size + search inputs -->
 	<div class="d-flex justify-content-between align-items-center mb-3">
 		<div>
-			<label for="pageSizeSelect" class="form-label me-2">Rows per page:</label>
+			<label for="pageSizeSelect" class="form-label me-2">Showing :</label>
 			<select id="pageSizeSelect" class="form-select d-inline-block w-auto" [(ngModel)]="pageSize"
 				(change)="onPageSizeChange()">
 				<option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
 			</select>
+			Total Data : <b>123</b>
 		</div>
-	
+
 		<!-- Pagination as usual -->
-		<nav aria-label="User pagination">
-			<ul class="pagination justify-content-center">
+		<nav aria-label="Page navigation">
+			<ul class="pagination justify-content-end">
+
+				<!-- First Page Button -->
 				<li class="page-item" [class.disabled]="currentPage === 1">
-					<button class="page-link" (click)="goToPage(currentPage - 1)">Previous</button>
+					<a class="page-link" (click)="goToFirst()">First</a>
 				</li>
 
-				<li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-					[class.active]="currentPage === i + 1">
-					<button class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</button>
+				<!-- Previous Button -->
+				<li class="page-item" [class.disabled]="currentPage === 1">
+					<a class="page-link" (click)="goToPrevious()">Previous</a>
 				</li>
 
+				<!-- Page Numbers -->
+				<li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage"
+					[class.disabled]="page === '...'">
+					<a class="page-link" (click)="goToPage(page)" [attr.tabindex]="page === '...' ? -1 : 0">{{ page
+						}}</a>
+				</li>
+
+				<!-- Next Button -->
 				<li class="page-item" [class.disabled]="currentPage === totalPages">
-					<button class="page-link" (click)="goToPage(currentPage + 1)">Next</button>
+					<a class="page-link" (click)="goToNext()">Next</a>
+				</li>
+
+				<!-- Last Page Button -->
+				<li class="page-item" [class.disabled]="currentPage === totalPages">
+					<a class="page-link" (click)="goToLast()">Last</a>
 				</li>
 			</ul>
 		</nav>
